@@ -373,7 +373,7 @@ require_once('HighriseWebAddress.class.php');
 			}
 			
 			if (!isset($tag_id))
-				throw new Excepcion("Tag $tag_name not found");
+				throw new Exception("Tag $tag_name not found");
 			
 			return $this->findPeopleByTagId($tag_id);
 		}
@@ -388,7 +388,7 @@ require_once('HighriseWebAddress.class.php');
 			}
 			
 			if (!isset($tag_id))
-				throw new Excepcion("Tag $tag_name not found");
+				throw new Exception("Tag $tag_name not found");
 			
 			return $this->findCompaniesByTagId($tag_id);
 		}
