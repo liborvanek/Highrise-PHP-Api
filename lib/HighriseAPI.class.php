@@ -1,9 +1,11 @@
 <?php
 
 require_once('HighriseAddress.class.php');
+require_once('HighriseCategory.class.php');
 require_once('HighriseCompany.class.php');
 require_once('HighriseCustomfield.class.php');
 require_once('HighriseDeal.class.php');
+require_once('HighriseDealCategory.class.php');
 require_once('HighriseEmailAddress.class.php');
 require_once('HighriseEmail.class.php');
 require_once('HighriseGroup.class.php');
@@ -15,6 +17,7 @@ require_once('HighrisePerson.class.php');
 require_once('HighrisePhoneNumber.class.php');
 require_once('HighriseTag.class.php');
 require_once('HighriseTask.class.php');
+require_once('HighriseTaskCategory.class.php');
 require_once('HighriseTwitterAccount.class.php');
 require_once('HighriseUser.class.php');
 require_once('HighriseWebAddress.class.php');
@@ -541,6 +544,38 @@ require_once('HighriseWebAddress.class.php');
 			
 			return $ret;
 		}
+
+    public function findAllDealCategories()
+    {
+      return $this->findAllCategories('deal');
+    }
+
+    public function findAllTaskCategories()
+    {
+      return $this->findAllCategories('task');
+    }
+
+    protected function findAllCategories($type)
+    {
+      $xml = $this->getUrl("/{$type}_categories.xml");
+      $this->checkForErrors("{ucwords($type)} Categories");
+
+      $xml_object = simplexml_load_string($xml);
+      $ret = array();
+      foreach($xml_object->{"$type-category"} as $c)
+      {
+        if ($type == 'deal') {
+          $category = new HighriseDealCategory($this);
+        }
+        if ($type == 'task') {
+          $category = new HighriseTaskCategory($this);
+        }
+        $category->loadFromXMLObject($c);
+        $ret[(string)$c->name] = $category;
+      }
+
+      return $ret;
+    }
 
         /* Groups */
 
