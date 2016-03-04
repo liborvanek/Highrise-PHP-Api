@@ -19,8 +19,9 @@
 		public $deleted;
 		
 		// public $group_id
-		// public $collection_id;
-		// public $collection_type;
+		
+		public $collection_id;
+		public $collection_type;
 	
 		public function save()
 		{
@@ -63,6 +64,8 @@
 			$this->setOwnerId($xml_obj->{'owner-id'});
 			$this->setSubjectId($xml_obj->{'subject-id'});
 			$this->setSubjectType($xml_obj->{'subject-type'});
+			$this->setCollectionId($xml_obj->{'collection-id'});
+			$this->setCollectionType($xml_obj->{'collection-type'});
 			$this->setCreatedAt($xml_obj->{'created-at'});
 			$this->setUpdatedAt($xml_obj->{'updated-at'});
 			$this->setVisibleTo($xml_obj->{'visible-to'});
@@ -129,6 +132,32 @@
 		{
 			return $this->subject_id;
 		}
+
+		public function setCollectionId($collection_id)
+		{
+			$this->collection_id = (string)$collection_id;
+		}
+
+		public function setCollectionType($collection_type)
+		{
+			$valid_types = array("Party", "Company", "Deal", "Kase");
+			$collection_type = ucwords(strtolower($collection_type));
+			if ($collection_type != null && !in_array($collection_type, $valid_types))
+				throw new Exception("$collection_type is not a valid collection type. Available collection types: " . implode(", ", $valid_types));
+	
+			$this->collection_type = (string)$collection_type;
+		}
+
+		public function getCollectionType()
+		{
+			return $this->collection_type;
+		}
+
+		public function getCollectionId()
+		{
+			return $this->collection_id;
+		}
+
 
 		
 		public function setOwnerId($owner_id)
@@ -198,6 +227,8 @@
 			$note->addChild("owner-id",$this->getOwnerId());
 			$note->addChild("subject-id",$this->getSubjectId());
 			$note->addChild("subject-type",$this->getSubjectType());
+			$note->addChild("collection-id",$this->getCollectionId());
+			$note->addChild("collection-type",$this->getCollectionType());
 			$note->addChild("visible-to",$this->getVisibleTo());
 			$note->addChild("created-at",$this->getCreatedAt());
 			$note->{'created-at'}->addAttribute("type","datetime");
