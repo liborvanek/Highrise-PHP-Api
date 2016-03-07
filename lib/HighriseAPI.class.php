@@ -1,6 +1,7 @@
 <?php
 
 require_once('HighriseAddress.class.php');
+require_once('HighriseCase.class.php');
 require_once('HighriseCategory.class.php');
 require_once('HighriseCompany.class.php');
 require_once('HighriseCustomfield.class.php');
